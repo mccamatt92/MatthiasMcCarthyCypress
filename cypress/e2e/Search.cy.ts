@@ -1,7 +1,8 @@
+/// <reference types="cypress" />
+
 describe('Unibet Blog Search Feature', () => {
   beforeEach(() => {
-    // Ignore specific known exceptions during tests
-    Cypress.on('uncaught:exception', (err) => {
+    Cypress.on('uncaught:exception', (err: Error) => {
       if (err.message.includes('loadMoreSettings is not defined')) {
         return false; // Prevent failure due to this error
       }
@@ -12,17 +13,23 @@ describe('Unibet Blog Search Feature', () => {
     cy.visit('https://www.unibet.co.uk/blog');
   });
 
-  const performSearch = (query) => {
+  /**
+   * @param query - The search term to use
+   */
+  const performSearch = (query: string): void => {
     cy.get('#searchIcon').click({ force: true });
     cy.get('.search-field').type(`${query}{enter}`);
   };
 
-  const verifySearchResultsContainText = (text) => {
+  /**
+   * @param text - The text to check for in search results
+   */
+  const verifySearchResultsContainText = (text: string): void => {
     cy.get('.pb-4.col-md-6.col-lg-4').each(($el) => {
       cy.wrap($el).within(() => {
         cy.get('.card-subtitle, h5.card-title')
           .invoke('text')
-          .then((content) => {
+          .then((content: string) => {
             expect(content.toLowerCase()).to.include(text.toLowerCase());
           });
       });
@@ -30,18 +37,18 @@ describe('Unibet Blog Search Feature', () => {
   };
 
   it('should return results for a valid search query', () => {
-    performSearch('sports'); // Search for 'sports'
-    verifySearchResultsContainText('sports'); // Validate results contain 'sports'
+    performSearch('Formula');
+    verifySearchResultsContainText('Formula');
   });
 
   it('should display a "no results" message for invalid queries', () => {
-    performSearch('xyzinvalid'); // Search for an invalid query
-    cy.get('.entry-header').should('contain', 'Nothing Found'); // Validate error message
+    performSearch('xyzinvalid');
+    cy.get('.entry-header').should('contain', 'Nothing Found');
   });
 
   it('should work correctly on mobile viewports', () => {
-    cy.viewport(375, 667); // Mobile view
-    performSearch('sports'); // Search for 'sports'
-    verifySearchResultsContainText('sports'); // Validate results contain 'sports'
+    cy.viewport(375, 667);
+    performSearch('Formula');
+    verifySearchResultsContainText('Formula');
   });
 });
