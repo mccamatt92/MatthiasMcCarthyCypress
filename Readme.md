@@ -1,7 +1,7 @@
 # Cypress Automation Project
 
 ## Setup
-1. Clone the repository: `git clone https://github.com/mccamatt92`
+1. Clone the repository: `git clone https://github.com/mccamatt92/MatthiasMcCarthyCypress`
 2. Install dependencies: `npm install`
 3. Run Cypress: `npx cypress open`
 
